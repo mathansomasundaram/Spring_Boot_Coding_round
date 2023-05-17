@@ -4,6 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name="student")
@@ -18,6 +19,9 @@ public class Student {
     private String pincode;
     private int score;
     private String result;
+    
+    @Transient
+    private long rank;
     
     
 	public int getStudentId() {
@@ -62,6 +66,14 @@ public class Student {
 	}
 	public void setResult(String result) {
 		this.result = result;
+	}
+	
+	
+	public long getRank() {
+		return rank;
+	}
+	public void setRank(long rank) {
+		this.rank = rank;
 	}
 	@Override
 	public String toString() {

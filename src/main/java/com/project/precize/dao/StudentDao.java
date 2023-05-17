@@ -44,4 +44,28 @@ public class StudentDao {
 
 		return student;
 	}
+
+	public Student findRankofStudent(String studentName) {
+		long rank=0;
+		Student studentRankDetails=null;
+		try(Session session = HibernateConfig.getSessionFactory().openSession()) {
+		    Query query = session.createQuery("SELECT COUNT(*) + 1 FROM Student WHERE score > (SELECT score FROM Student WHERE upper(name) = :name)");
+		    query.setParameter("name", studentName.toUpperCase());
+
+		    rank = (long) query.getSingleResult();
+		    
+		    query = session.createQuery("SELECT s " +
+	                "FROM Student s " +
+	                "WHERE upper(s.name) = :name");
+	        query.setParameter("name", studentName.toUpperCase());
+
+	        List<Student> resultList = query.list();
+	        if (!resultList.isEmpty()) {
+	            studentRankDetails = resultList.get(0);
+	            studentRankDetails.setRank(rank);
+	        }
+		} 
+
+		return studentRankDetails;
+	}
 }

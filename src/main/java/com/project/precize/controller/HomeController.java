@@ -52,4 +52,11 @@ public class HomeController {
 	    }
 	    return "redirect:/";
 	}
+	
+	@PostMapping("/findRank")
+	public String findRankofStudent(@RequestParam("name") String studentName,Model model) {
+		Student studentDetails=studentDao.findRankofStudent(studentName);
+		model.addAttribute("rankdetails", studentDetails);
+		return "displayStudent";
+	}
 }
