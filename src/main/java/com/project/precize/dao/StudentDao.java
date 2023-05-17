@@ -54,14 +54,8 @@ public class StudentDao {
 
 		    rank = (long) query.getSingleResult();
 		    
-		    query = session.createQuery("SELECT s " +
-	                "FROM Student s " +
-	                "WHERE upper(s.name) = :name");
-	        query.setParameter("name", studentName.toUpperCase());
-
-	        List<Student> resultList = query.list();
-	        if (!resultList.isEmpty()) {
-	            studentRankDetails = resultList.get(0);
+		    studentRankDetails=findStudentByName(studentName);
+	        if (studentRankDetails!=null) {
 	            studentRankDetails.setRank(rank);
 	        }
 		} 
@@ -69,6 +63,21 @@ public class StudentDao {
 		return studentRankDetails;
 	}
 
+	public Student findStudentByName(String studentName) {
+		Student student=null;
+		try(Session session = HibernateConfig.getSessionFactory().openSession()) {
+			Query query = session.createQuery("SELECT s " +
+	                "FROM Student s " +
+	                "WHERE upper(s.name) = :name");
+	        query.setParameter("name", studentName.toUpperCase());
+
+	        List<Student> resultList = query.list();
+	        if (!resultList.isEmpty()) {
+	            student = resultList.get(0);
+	        }
+		}
+		return student;
+	}
 	public boolean deleteStudent(String studentName) {
 		try (Session session = HibernateConfig.getSessionFactory().openSession()) {
 	         session.beginTransaction();
@@ -91,5 +100,28 @@ public class StudentDao {
 	        e.printStackTrace();
 	    }
 		return false;
+	}
+
+	public boolean updateExistingRecord(Student student) {
+		Student studentToUpdate=findStudentByName(student.getName());
+		try (Session session = HibernateConfig.getSessionFactory().openSession()) {
+			
+			if (studentToUpdate != null) {
+				session.beginTransaction();
+	            studentToUpdate.setScore(student.getScore()); // Update the SAT score
+
+	            if(student.getScore()>=30) {
+	            	studentToUpdate.setResult("PASS");
+	            }else {
+	            	studentToUpdate.setResult("FAIL");
+	            }
+	            session.update(studentToUpdate); // Persist the updated student record
+
+	            session.getTransaction().commit();
+	            return true;
+	        } else {
+	            return false; // Student record not found
+	        }
+		}
 	}
 }

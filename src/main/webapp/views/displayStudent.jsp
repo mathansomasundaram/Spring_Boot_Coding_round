@@ -13,7 +13,7 @@
         
         if (student != null) {
     %>
-    <label>Name: <%= student.getName() %></label><br>
+    <label>Name: <%= student.getName().toUpperCase() %></label><br>
     <label>SAT Score: <%= student.getScore() %></label><br>
     <label>Rank: <%= student.getRank() %></label><br>
     <% 

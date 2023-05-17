@@ -73,4 +73,25 @@ public class HomeController {
 		
 		return "redirect:/";
 	}
+	
+	@PostMapping("getUserDetailsforUpdate")
+	public String getUserDetailsforUpdateProcess(@RequestParam("name") String studentName, Model model) {
+		Student student=studentDao.findStudentByName(studentName);
+		model.addAttribute("studentDetailsForUpdate", student);
+		return "updateSATScore";
+	}
+	
+	@PostMapping("updateData")
+	public String updateExistingRecord(@ModelAttribute Student student, RedirectAttributes redirectAttributes) {
+		boolean isStudentUpdated=studentDao.updateExistingRecord(student);
+		if (isStudentUpdated) {
+			redirectAttributes.addAttribute("message", "Data updated successfully");
+		} else {
+			redirectAttributes.addAttribute("message", "Failed to update data");
+		}
+		
+		return "redirect:/";
+	}
+	
+	
 }

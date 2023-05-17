@@ -25,12 +25,12 @@
             for (Student student : studentList) {
         %>
         <tr>
-            <td align="left"><%= student.getName() %></td>
-            <td align="left"><%= student.getCity() %></td>
-            <td align="left"><%= student.getCountry() %></td>
+            <td align="left"><%= student.getName().toUpperCase() %></td>
+            <td align="left"><%= student.getCity().toUpperCase() %></td>
+            <td align="left"><%= student.getCountry().toUpperCase() %></td>
             <td align="left"><%= student.getPincode() %></td>
             <td align="left"><%= student.getScore() %></td>
-            <td align="left"><%= student.getResult() %></td>
+            <td align="left"><%= student.getResult().toUpperCase() %></td>
         </tr>
         <% 
             }
