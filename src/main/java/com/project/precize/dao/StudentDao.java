@@ -68,4 +68,28 @@ public class StudentDao {
 
 		return studentRankDetails;
 	}
+
+	public boolean deleteStudent(String studentName) {
+		try (Session session = HibernateConfig.getSessionFactory().openSession()) {
+	         session.beginTransaction();
+	        
+	        Query query = session.createQuery("delete from Student where upper(name) = :name");
+	        query.setParameter("name", studentName.toUpperCase());
+	        
+	        int rowCount = query.executeUpdate();
+	        
+	        session.getTransaction().commit();
+	        
+	        if (rowCount > 0) {
+	            System.out.println("Student with name " + studentName + " has been deleted successfully.");
+	            return true;
+	        } else {
+	            System.out.println("Student with name " + studentName + " does not exist.");
+	            return false;
+	        }
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+		return false;
+	}
 }
